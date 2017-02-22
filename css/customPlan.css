@@ -1,0 +1,16 @@
+.customPlan_panel {
+    margin-top:50px;
+}
+.tsc {
+    margin:0px 0px;
+}
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content:flex-start;
+    align-items: center;
+    align-content: flex-start
+}
+.rowRight {
+    margin: 0px 15px;
+}
