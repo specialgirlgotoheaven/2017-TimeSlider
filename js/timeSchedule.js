@@ -5,7 +5,7 @@ if (typeof jQuery === 'undefined') {
     throw new Error('TimeSchedule\'s JavaScript requires jQuery')
 }
 (function ($) {
-/*    'use strict';
+/*  'use strict';
     var version = $.fn.jquery.split(' ')[0].split('.');
     if ((version[0] < 2 && version[1] < 6) || (version[0] == 1 && version[1] == 6 && version[2] < 1)) {
         throw new Error('TimeSchedule\'s JavaScript requires jQuery version 1.6.1 or higher');
@@ -44,10 +44,10 @@ if (typeof jQuery === 'undefined') {
         start_hour_min_seconds :"00:00:00",//TODO 在验证有效性时,如果只输入小于24小时的数字,自动转化为例如10:00:00这种形式,类推,如果输入10:20,自动转化为10:20:00
         start_timestamp: (new Date("2016-12-19 00:00:00")).getTime(),   // left border //(new Date(this.static_date_string)).getTime()
         current_timestamp: (new Date(this.static_date_string)).getTime(), // current timestamp
-        hours_per_ruler : 24,                    //一把尺子上有几个小时 length of graduation ruler in hours (min 1, max 48)
-        graduation_step : 10,                    //每一小格多少分钟 minimum pixels between graduations
-        distance_between_gtitle : 50,            //刻度间间隔 minimum pixels between titles of graduations
-        update_timestamp_interval: 1000,        // 时间同步时间间隔 interval for updating current time
+        hours_per_ruler : 24,                   //一把尺子上有几个小时 length of graduation ruler in hours (min 1, max 48)
+        graduation_step : 10,                   //每一小格多少分钟 minimum pixels between graduations
+        distance_between_gtitle : 50,           //刻度间间隔 minimum pixels between titles of graduations
+        update_timestamp_interval : 1000,        // 时间同步时间间隔 interval for updating current time
         update_interval: 1000,                  // interval for updating elements
         show_ms: false,                         //是否显示微秒 whether to show the milliseconds?
         show_time_cursor:true,                  //是否显示当前时间的红色游标
@@ -73,10 +73,13 @@ if (typeof jQuery === 'undefined') {
 
         /**
          * 2017-02-21
+         *
          * */
+
         hours_per_ruler : 24,                    //一把尺子上有几个小时 length of graduation ruler in hours (min 1, max 48)
         graduation_step : 10,                    //每一小格多少分钟 minimum pixels between graduations
-        distance_between_gtitle : 5,             //刻度间间隔 minimum pixels between titles of graduations
+        distance_between_gtitle : '5px',             //刻度间间隔 minimum pixels between titles of graduations
+
 
 
 
@@ -93,13 +96,21 @@ if (typeof jQuery === 'undefined') {
         this.gt_height = this.$element.find('.graduation-title').height();
         //console.log(this.gt_height);
         this.$element.find('.graduation-title').remove();
-        this.$element.append(
+/*        this.$element.append(
             '<div class="ruler" style = "height:' + (this.$element.height() + this.gt_height) + 'px;"></div>' +
+            '<div class="prompts" style = "top:-' + (this.$element.height() * 2 + this.gt_height) + 'px;"></div>'
+        );*/
+        this.$element.append(
+            '<div class="ruler" style = "height:200px;"></div>' +
             '<div class="prompts" style = "top:-' + (this.$element.height() * 2 + this.gt_height) + 'px;"></div>'
         );
         this.$element.height(this.$element.height() + this.gt_height);
         this.$ruler = this.$element.find('.ruler');
         this.$prompts = this.$element.find('.prompts');
+
+        this.options = this.get_options(options);
+
+        this.add_graduations2();
 
 /*      if (this.$element.attr('start_timestamp')) {
             options['start_timestamp'] = parseInt(this.$element.attr('start_timestamp'));
@@ -133,8 +144,10 @@ if (typeof jQuery === 'undefined') {
 
     TimeSlider.prototype.get_options = function (options) {
         options = $.extend({}, this.get_defaults(), options);
-        return this.validate_options(options);
+        return options;
+        //return this.validate_options(options);
     };
+
     //todo
     TimeSlider.prototype.validate_options = function (options){
         if(options['start_hour_min_seconds'].length < 8){
@@ -144,12 +157,90 @@ if (typeof jQuery === 'undefined') {
 
             }
         }
+    };
+//尺子的总长度:this.options.hours_per_ruler * 60 * this.options.distance_between_gtitle / graduation_step ;
+    TimeSlider.prototype.add_graduations2 = function (){
+        var temp;
+        for(var i = 0 ; i < this.options.hours_per_ruler; i++){
+            this.$ruler.append ('<div id = "temp'+i+'" class="temp" style="border:1px solid blue"></div>');
+            for(var j = 0 ; j < this.options.graduation_step; j++){
+                this.$ruler.append ('<div id = "temp'+i+'" class="temp" style="border:1px solid red"></div>');
+            }
+        }
     }
+
+    TimeSlider.prototype.add_graduations = function() {
+        var leftMove = 40;
+        var px_per_minute = this.$ruler.width() / (this.options.hours_per_ruler * 60);//每分钟多少像素
+        var px_per_step = this.options.graduation_step;//每一格多少分钟
+        var min_step = px_per_step / px_per_minute;//每个像素多少分钟
+        for (var i = 0; i < this.steps_by_minutes.length; i++) {
+            if (min_step <= this.steps_by_minutes[i]) {
+                min_step = this.steps_by_minutes[i];
+                px_per_step = min_step * px_per_minute;
+                break;
+            }
+        }
+        this.minute_per_graduation = min_step;
+        //this.minute_per_graduation = null,
+
+        var medium_step = 30;
+        for (var i = 0; i < this.steps_by_minutes.length; i++) {
+            if (this.options.distance_between_gtitle / px_per_minute <= this.steps_by_minutes[i]) {
+                medium_step = this.steps_by_minutes[i];
+                break;
+            }
+        }
+
+        var ms_offset = this.ms_to_next_step(this.options.start_timestamp, min_step * 60 * 1000);
+        var minute_caret = this.options.start_timestamp + ms_offset - (min_step * 60 * 1000) * 4;
+        var num_steps = this.$ruler.width() / px_per_step;
+        var date;
+        var caret_class;
+        var left;
+
+        for (var i = -4; i <= num_steps; i++) {
+            if(i == 0){
+                //leftMove = 15;
+            }else if(i == num_steps){
+                //leftMove = 52;
+            }else {
+                leftMove = 40;
+            }
+            caret_class = '';
+            date = new Date(minute_caret);
+            left = i * px_per_step + this.px_per_ms * ms_offset;
+            if (date.getHours() == 0 && date.getMinutes() == 0) {
+                caret_class = 'big';
+            }
+            else if (minute_caret / (60 * 1000) % medium_step == 0) {
+                caret_class = 'middle';
+            }
+            this.$ruler.append('<div id="hour' + i + '" class="graduation ' + caret_class + '" style="left: ' + left.toString() + 'px"></div>');
+            if(i == num_steps){
+                this.$ruler.append(
+                    '<div id="graduation-title-hour' + i + '" class="graduation-title' + (caret_class ? '' : ' hidden') + '" style="left:' + (left - leftMove).toString() + 'px">' +
+                    '23:59:59' +
+                    '</div>'
+                );
+            }else{
+                this.$ruler.append(
+                    '<div id="graduation-title-hour' + i + '" class="graduation-title' + (caret_class ? '' : ' hidden') + '" style="left:' + (left - leftMove).toString() + 'px">' +
+                    this.graduation_title(date) +
+                    '</div>'
+                );
+            }
+            minute_caret += min_step * 60 * 1000;
+        }
+    };
+
     TimeSlider.prototype.get_defaults = function() {
         return TimeSlider.DEFAULTS;
     };
     /**
      * 2017-02-21
+     *
+     *
      * */
     TimeSlider.prototype.timeStringToNumber = function(TimeString) {
         // first check the TimeString validity
