@@ -10,6 +10,15 @@ if (typeof jQuery === 'undefined') {
     if ((version[0] < 2 && version[1] < 6) || (version[0] == 1 && version[1] == 6 && version[2] < 1)) {
         throw new Error('TimeSchedule\'s JavaScript requires jQuery version 1.6.1 or higher');
     }*/
+
+
+
+
+
+
+
+
+
 }(jQuery));
 (function($){
     var TimeSlider = function(element, options){
@@ -47,7 +56,7 @@ if (typeof jQuery === 'undefined') {
         hours_per_ruler : 24,                   //一把尺子上有几个小时 length of graduation ruler in hours (min 1, max 48)
         graduation_step : 10,                   //每一小格多少分钟 minimum pixels between graduations
         distance_between_gtitle : 50,           //刻度间间隔 minimum pixels between titles of graduations
-        update_timestamp_interval : 1000,        // 时间同步时间间隔 interval for updating current time
+        update_timestamp_interval : 1000,       // 时间同步时间间隔 interval for updating current time
         update_interval: 1000,                  // interval for updating elements
         show_ms: false,                         //是否显示微秒 whether to show the milliseconds?
         show_time_cursor:true,                  //是否显示当前时间的红色游标
@@ -75,10 +84,9 @@ if (typeof jQuery === 'undefined') {
          * 2017-02-21
          *
          * */
-
         hours_per_ruler : 24,                    //一把尺子上有几个小时 length of graduation ruler in hours (min 1, max 48)
         graduation_step : 10,                    //每一小格多少分钟 minimum pixels between graduations
-        distance_between_gtitle : '5px',             //刻度间间隔 minimum pixels between titles of graduations
+        distance_between_gtitle : '5px',         //刻度间间隔 minimum pixels between titles of graduations
 
 
 
@@ -101,7 +109,7 @@ if (typeof jQuery === 'undefined') {
             '<div class="prompts" style = "top:-' + (this.$element.height() * 2 + this.gt_height) + 'px;"></div>'
         );*/
         this.$element.append(
-            '<div class="ruler" style = "height:200px;"></div>' +
+            '<div class="ruler" style = ""></div>' +
             '<div class="prompts" style = "top:-' + (this.$element.height() * 2 + this.gt_height) + 'px;"></div>'
         );
         this.$element.height(this.$element.height() + this.gt_height);
@@ -161,10 +169,12 @@ if (typeof jQuery === 'undefined') {
 //尺子的总长度:this.options.hours_per_ruler * 60 * this.options.distance_between_gtitle / graduation_step ;
     TimeSlider.prototype.add_graduations2 = function (){
         var temp;
+        var left = 10;
+        console.log("this.options.hours_per_ruler:" + this.options.hours_per_ruler + ",this.options.graduation_step:"+this.options.graduation_step);
         for(var i = 0 ; i < this.options.hours_per_ruler; i++){
-            this.$ruler.append ('<div id = "temp'+i+'" class="temp" style="border:1px solid blue"></div>');
+            this.$ruler.append ('<div id = "temp'+i+'" class="temp" style="border:1px solid blue;width:1px;height:20px;background: #cccccc;width:1px;position: absolute"></div>');
             for(var j = 0 ; j < this.options.graduation_step; j++){
-                this.$ruler.append ('<div id = "temp'+i+'" class="temp" style="border:1px solid red"></div>');
+                this.$ruler.append ('<div id = "temp'+i+'" class="temp" style="position : absolute;width:1px;height:20px;background: #cccccc;left:'+(left * i).toString()+'px"></div>');
             }
         }
     }
@@ -246,8 +256,8 @@ if (typeof jQuery === 'undefined') {
         // first check the TimeString validity
         if(this.CheckTimeString(TimeString)){
            var arr = TimeString.split(":");
-           var number =  arr[0] * 1 + arr[1] * 100 + arr[2] * 10000 ;
-           return  number ;
+           var number = arr[0] * 1 + arr[1] * 100 + arr[2] * 10000 ;
+           return number ;
         }else{
            return 0 ;
         }
@@ -271,7 +281,7 @@ if (typeof jQuery === 'undefined') {
                 len++;
             }
             else {
-                len+=2;
+                len += 2;
             }
         }
         return len;
@@ -284,7 +294,7 @@ if (typeof jQuery === 'undefined') {
         return this.each(function() {
             var _this = $(this);
             var data = _this.data('timeslider');
-            if (! data) {
+            if (!data) {
                 _this.data('timeslider', new TimeSlider(_this, options));
             }
             else {
@@ -296,7 +306,6 @@ if (typeof jQuery === 'undefined') {
                         case 'add':
                             data.add_timecell(timecell);
                             break;
-
                         case 'toggle':
                             data.toggle_timecell(timecell);
                             break;
