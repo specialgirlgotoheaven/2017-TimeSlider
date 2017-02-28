@@ -3,7 +3,7 @@
  */
 ;(function($,window,document,undefined){
     var pluginName="customPlan";
-    var current_time = (new Date("2016-12-19 12:00:00")).getTime();//+ ((new Date("2016-12-19 12:00:00")).getTimezoneOffset() * 60 * 1000 * -1)
+    var current_time = 1482120000000;//(new Date("2016-12-19 12:00:00")).getTime();//+ ((new Date("2016-12-19 12:00:00")).getTimezoneOffset() * 60 * 1000 * -1)
     var defaults = {
         dateType:"week",//holiday
         weekRows:["星期一","星期二","星期三","星期四","星期五","星期六","星期日"],

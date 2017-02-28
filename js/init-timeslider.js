@@ -281,8 +281,9 @@ if (typeof jQuery === 'undefined') {
                 break;
             }
         }
-
         var ms_offset = this.ms_to_next_step(this.options.start_timestamp, min_step * 60 * 1000);
+        console.log("ms_offset:"+ms_offset);
+
         var minute_caret = this.options.start_timestamp + ms_offset - (min_step * 60 * 1000) * 4;
         var num_steps = this.$ruler.width() / px_per_step;
         var date;
@@ -298,12 +299,16 @@ if (typeof jQuery === 'undefined') {
             else if (minute_caret / (60 * 1000) % medium_step == 0) {
                 caret_class = 'middle';
             }
+
+            console.log("caret_class:"+caret_class);
+
             this.$ruler.append('<div id="hour' + i + '" class="graduation ' + caret_class + '" style="left: ' + left.toString() + 'px"></div>');
             this.$ruler.append(
                 '<div id="graduation-title-hour' + i + '" class="graduation-title' + (caret_class ? '' : ' hidden') + '" style="left:' + (left - 40).toString() + 'px">' +
                 this.graduation_title(date) +
                 '</div>'
             );
+            console.log("num_steps:"+num_steps);
             minute_caret += min_step * 60 * 1000;
         }
     };

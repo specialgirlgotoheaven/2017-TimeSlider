@@ -16,10 +16,10 @@
 			<input type="radio" name="planType" value="holiday"><label>按假期制定计划</label>
 		</span>
 	</div>-->
-<!-- 	<div id="customPlanWeek" class="customPlan_panel">
-	<button class="clearAll">清空</button>
-</div>
-<button id = 'submit'>提交</button> -->
+	<div id="customPlanWeek" class="customPlan_panel">
+		<button class="clearAll">清空</button>
+	</div>
+	<button id = 'submit'>提交</button>
 <!--	<div id="customPlanHoliday" class="customPlan_panel" style="display: none">
 		<button class="clearAll">清空</button>
 	</div>-->
@@ -31,7 +31,7 @@
 	<script type="text/javascript">
         //var current_time = (new Date("2016-12-19 12:00:00")).getTime();//+ ((new Date("2016-12-19 12:00:00")).getTimezoneOffset() * 60 * 1000 * -1)
 		$(document).ready(function () {
-//			$("#customPlanWeek").customPlan();//$("#customPlanHoliday").customPlan({dateType:"holiday"});
+			$("#customPlanWeek").customPlan();//$("#customPlanHoliday").customPlan({dateType:"holiday"});
 //			/*			if($("input[name='planType']").val() == 'week'){
 //				$("#customPlanWeek").show();
 //				$("#customPlanWeek").customPlan();
@@ -57,16 +57,16 @@
 //			});
 			//$("#customPlanWeek").data().plugin_customPlan.showdata(obj);
 
-			$('#aaa').TimeSlider();//初始化时间轴
+			/*$('#aaa').TimeSlider();//初始化时间轴*/
 		});
 	</script>
-<!--<div id="dialog" title="Basic dialog" style="display: none">-->
-	<!--<div><label>开始时间:</label><input id="dialog_Start" type="text"  class="Wdate" onClick="WdatePicker({dateFmt:'HH:mm:ss'})"></div>&lt;!&ndash;,minDate:'%H:%m:%s',maxDate:'%H:%m:%s'&ndash;&gt;-->
-	<!--<div><label>结束时间:</label><input id="dialog_Stop" type="text"  class="Wdate"  onClick="WdatePicker({dateFmt:'HH:mm:ss'})"></div>&lt;!&ndash;,minDate:'%H:%m:%s',maxDate:'%H:%m:%s'&ndash;&gt;-->
-	<!--<input type="hidden" id="current_dbclick_timecell_id" value="">-->
-	<!--<input id="by_dialog_edit" type="hidden" value=""/>-->
+<div id="dialog" title="Basic dialog" style="display: none">
+	<div><label>开始时间:</label><input id="dialog_Start" type="text"  class="Wdate" onClick="WdatePicker({dateFmt:'HH:mm:ss'})"></div>&lt;!&ndash;,minDate:'%H:%m:%s',maxDate:'%H:%m:%s'&ndash;&gt;
+	<div><label>结束时间:</label><input id="dialog_Stop" type="text"  class="Wdate"  onClick="WdatePicker({dateFmt:'HH:mm:ss'})"></div>&lt;!&ndash;,minDate:'%H:%m:%s',maxDate:'%H:%m:%s'&ndash;&gt;
+	<input type="hidden" id="current_dbclick_timecell_id" value="">
+	<input id="by_dialog_edit" type="hidden" value=""/>
 
-<!--</div>-->
-<div id="aaa" class="time-slider"></div>
+</div>
+<!-- <div id="aaa" class="time-slider"></div> -->
 </body>
 </html>

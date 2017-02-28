@@ -61,8 +61,8 @@ if (typeof jQuery === 'undefined') {
 
     TimeSlider.DEFAULTS = {
         //start_timestamp: (new Date(this.static_date_string)).getTime() + ((new Date(this.static_date_string)).getTimezoneOffset() * 60 * 1000 * -1),   // left border
-        start_timestamp: (new Date("2016-12-19 00:00:00")).getTime(),// left border //(new Date(this.static_date_string)).getTime()
-        current_timestamp: (new Date(this.static_date_string)).getTime(), // current timestamp
+        start_timestamp: 1482076800000,//(new Date("2016-12-19 00:00:00")).getTime(),// left border //(new Date(this.static_date_string)).getTime()
+        current_timestamp: 1482120000000,//(new Date(this.static_date_string)).getTime(), // current timestamp
         hours_per_ruler: 24,                    //一把尺子上有几个小时 length of graduation ruler in hours (min 1, max 48)
         graduation_step: 10,                    //每一小格多少分钟 minimum pixels between graduations
         distance_between_gtitle: 50,            //刻度间间隔 minimum pixels between titles of graduations
@@ -71,7 +71,7 @@ if (typeof jQuery === 'undefined') {
         show_ms: false,                         //是否显示微秒 whether to show the milliseconds?
         show_time_cursor:true,                  //是否显示当前时间的红色游标
         init_cells: null,                       //list of time cells or function
-        ruler_enable_move: true,
+        ruler_enable_move: false,
         timecell_enable_move: true,
         timecell_enable_resize: true,
         on_add_timecell_callback: null,
@@ -337,8 +337,9 @@ if (typeof jQuery === 'undefined') {
         _this.$ruler.mousedown(
 
             function(e){
+                //alert("111");
                 _this.draw_new_timecell_mousedown = true;
-                console.log("left:");
+                console.log("left8888888:");
                 console.log(_this.get_cursor_x_position(e) - _this.getElementLeft(_this.$element[0]));
 /*                if(_this.get_cursor_x_position(e) < 840){
                     _this.draw_new_timecell2(e);
@@ -410,6 +411,7 @@ if (typeof jQuery === 'undefined') {
         }
 
         var ms_offset = this.ms_to_next_step(this.options.start_timestamp, min_step * 60 * 1000);
+        console.log("ms_offset:" + ms_offset);
         var minute_caret = this.options.start_timestamp + ms_offset - (min_step * 60 * 1000) * 4;
         var num_steps = this.$ruler.width() / px_per_step;
         var date;
@@ -421,7 +423,7 @@ if (typeof jQuery === 'undefined') {
             if(i == 0){
                 //leftMove = 15;
             }else if(i == num_steps){
-                // leftMove = 52;
+                //leftMove = 52;
             }else {
                 leftMove = 40;
             }
@@ -434,6 +436,7 @@ if (typeof jQuery === 'undefined') {
             else if (minute_caret / (60 * 1000) % medium_step == 0) {
                 caret_class = 'middle';
             }
+            console.log("caret_class:"+caret_class);
             this.$ruler.append('<div id="hour' + i + '" class="graduation ' + caret_class + '" style="left: ' + left.toString() + 'px"></div>');
             if(i == num_steps){
                 this.$ruler.append(
@@ -448,7 +451,7 @@ if (typeof jQuery === 'undefined') {
                     '</div>'
                 );
             }
-
+            console.log("num_steps:"+num_steps);
             minute_caret += min_step * 60 * 1000;
         }
     };
@@ -521,7 +524,7 @@ if (typeof jQuery === 'undefined') {
     TimeSlider.prototype.draw_new_timecell2 = function (e) {
         this.options.draw_new_timecell_flag = true;
         var start_x = this.options.draw_new_timecell_start_x  = this.get_cursor_x_position(e);
-        var tempInitDate = new Date(this.static_date_string.slice(0,10)+" 00:00:00").getTime();
+        var tempInitDate = 1482076800000;//new Date(this.static_date_string.slice(0,10)+" 00:00:00").getTime();
         var diff = this.options.draw_new_timecell_start_x - this.getElementLeft(this.$element[0]);
 
         var tempTimecell = {
