@@ -19,8 +19,8 @@ if (typeof jQuery === 'undefined') {
 
 (function ($) {
     var TimeSlider = function(element, options) {
-        this.static_date_string = "2016-12-19 12:00:00";
-        this.static_date = "2016-12-19";
+        this.static_date_string = "2016/12/19 12:00:00";
+        this.static_date = "2016/12/19";
         this.$element = null;
         this.$ruler = null;
         this.$prompts = null;
